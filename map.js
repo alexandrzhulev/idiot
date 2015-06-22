@@ -1,5 +1,5 @@
 /**
- * Map for idiot app
+ * Map of world for idiot app
  */
 
 map =  ["############################",
