@@ -1,0 +1,24 @@
+.wall,
+.space,
+.plant,
+.idiot {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+}
+
+.wall {
+    background-color: #000000;
+}
+
+.space {
+    border: 1px solid #000000;
+}
+
+.idiot {
+    background-color: yellow;
+}
+
+.plant {
+    background-color: green;
+}

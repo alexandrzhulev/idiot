@@ -64,7 +64,40 @@ function render(map) {
 
 
 function view(map) {
+    var world = document.getElementById("world");
+
+    var wall  = document.createElement("div");
+    var idiot = document.createElement("div");
+    var space = document.createElement("div");
+    var plant = document.createElement("div");
+    wall.setAttribute("class", "wall");
+    idiot.setAttribute("class", "idiot");
+    space.setAttribute("class", "space");
+    plant.setAttribute("class", "plant");
+
+    world.appendChild(wall );
+    world.appendChild(idiot);
+    world.appendChild(space);
 
 
 
+    for (var row in map) {
+        for (var cell in map[row]) {
+            switch (map[row][cell]) {
+                case WALL:
+                    wall.setAttribute("style", "top: " + row + "px; botom: " + cell + "px");
+                    world.appendChild(wall);
+                    break;
+                case IDIOT:
+                    world.appendChild(idiot);
+                    break;
+                case PLANT:
+                    world.appendChild(space);
+                    break;
+                case SPACE:
+                    world.appendChild(plant);
+                    break;
+            }
+        }
+    }
 }
