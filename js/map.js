@@ -61,3 +61,10 @@ function render(map) {
 
     return idiotMap;
 }
+
+
+function view(map) {
+
+
+
+}
