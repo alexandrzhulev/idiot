@@ -98,7 +98,7 @@ function Idiot(map){
                 break;
             case PLANT:
                 console.log("in " + direction + " there is a PLANT");
-                this.eatInDirection();
+                this.eatInDirection(direction);
                 break;
             case SPACE:
                 console.log("in " + direction + " there is a SPACE");
@@ -152,6 +152,8 @@ function Idiot(map){
                 console.log("posY after move " + this.positionY);
                 break;
         }
+        updateMap(this.map, direction, [x,y]);
+
     };
 
 
@@ -203,6 +205,7 @@ function Idiot(map){
                 console.log("posY after move " + this.positionY);
                 break;
         }
+        updateMap(this.map, direction, [x,y]);
 
     };
 
@@ -219,13 +222,12 @@ function Idiot(map){
 
         idiotMap[y][x] = DEAD;
         console.log("IDIOT IS DEAD!");
+
+        // update map !!!
     };
 
 
-
-
     this.updateMap = function() {
-
 
     };
 

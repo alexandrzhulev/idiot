@@ -2,13 +2,13 @@
 .space,
 .plant,
 .idiot {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     position: absolute;
 }
 
 .wall {
-    background-color: #000000;
+    background-color: #8b4513;
 }
 
 .space {
@@ -16,7 +16,7 @@
 }
 
 .idiot {
-    background-color: #ffbc2e;
+    background-color: #ffef29;
 }
 
 .plant {
