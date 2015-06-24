@@ -14,6 +14,8 @@ var HEALTH_GAIN = 3;
 
 var SPEED = 1000;
 
+var RADIUS = 4;
+
 /**
  * Idiot object constructor
  *
@@ -29,7 +31,9 @@ function Idiot(map){
     idiot.map = map;
     idiot.health = HEALTH;
     idiot.speed = SPEED;
+    idiot.radius = RADIUS;
     idiot.position = findPosition();
+    idiot.wallInDirection = {};
 
     idiot.getElement = function(coordinates) {
         var IdiotMap = idiot.map,
@@ -39,22 +43,22 @@ function Idiot(map){
         return IdiotMap[positionY][positionX];
     };
 
-    idiot.lookInDirection = function(direction) {
+    idiot.lookInDirection = function(direction, radius) {
         var element;
         var x = parseInt(idiot.position.x),
             y = parseInt(idiot.position.y);
         switch (direction) {
             case UP_DIRECTION:
-                element = idiot.getElement([x, y - 1]);
+                element = idiot.getElement([x, y - radius]);
                 break;
             case RIGHT_DIRECTION:
-                element = idiot.getElement([x + 1, y]);
+                element = idiot.getElement([x + radius, y]);
                 break;
             case DOWN_DIRECTION:
-                element = idiot.getElement([x, y + 1]);
+                element = idiot.getElement([x, y + radius]);
                 break;
             case LEFT_DIRECTION:
-                element = idiot.getElement([x - 1, y]);
+                element = idiot.getElement([x - radius, y]);
                 break;
         }
 
@@ -72,26 +76,42 @@ function Idiot(map){
     /**
      * Move Idiot method
      */
+//    idiot.move = function() {
+//        if (!idiot.health) {
+//            idiot.die();
+//            return;
+//        }
+//        var direction = chooseDirection();
+//        switch (idiot.lookInDirection(direction)) {
+//            case WALL:
+//                console.log("in " + direction + " there is a WAll"); //-------------------------------------------------
+//                break;
+//            case PLANT:
+//                console.log("in " + direction + " there is a PLANT"); //------------------------------------------------
+//                idiot.stepInDirection(direction);
+//                idiot.eat();
+//                break;
+//            case SPACE:
+//                console.log("in " + direction + " there is a SPACE"); //------------------------------------------------
+//                idiot.stepInDirection(direction);
+//                break;
+//        }
+//    };
+
     idiot.move = function() {
         if (!idiot.health) {
             idiot.die();
             return;
         }
-        var direction = chooseDirection();
-        switch (idiot.lookInDirection(direction)) {
-            case WALL:
-                console.log("in " + direction + " there is a WAll"); //-------------------------------------------------
-                break;
-            case PLANT:
-                console.log("in " + direction + " there is a PLANT"); //------------------------------------------------
-                idiot.stepInDirection(direction);
-                idiot.eat();
-                break;
-            case SPACE:
-                console.log("in " + direction + " there is a SPACE"); //------------------------------------------------
-                idiot.stepInDirection(direction);
-                break;
+        if (!route) {
+            console.log("no plant");
         }
+
+        var route = idiot.findPlant();
+        for (var i = 1; i <= route.radius; i++) {
+            idiot.stepInDirection(route.direction);
+        }
+        idiot.eat();
     };
 
 
@@ -149,6 +169,37 @@ function Idiot(map){
         console.log("IDIOT IS DEAD!"); //------------------------------------------------------------------------------
         updateMap(idiot.map, null, [x, y]);
         clearTimeout(lifecycle);
+    };
+
+
+    /**
+     * Find plant Idiot method
+     */
+    idiot.findPlant = function() {
+        var route = {};
+
+        for (var radius = 1; radius <= idiot.radius; radius++) {
+            for (var direction = 1; direction <= DIRECTIONS_NUMBER; direction++) {
+                if (idiot.wallInDirection[direction]) {
+                    continue;
+                } else {
+                    switch (idiot.lookInDirection(direction, radius)) { // --------------------------------and radius
+                        case WALL:
+                            idiot.wallInDirection[direction] = true;
+                            break;
+                        case PLANT:
+                            return route = {
+                                direction: direction,
+                                radius: radius
+                            };
+                            break;
+                        case SPACE:
+                            //---------------------- return some route
+                            break;
+                    }
+                }
+            }
+        }
     };
 
     function findPosition() {
