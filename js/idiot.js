@@ -1,12 +1,8 @@
 /**
- * Idiot object
+ * App Constants
  *
- * @param map
- * @constructor
- * @param x
- * @param y
  */
-
+var DIRECTIONS_NUMBER = 4;
 var UP_DIRECTION = 1;
 var RIGHT_DIRECTION = 2;
 var DOWN_DIRECTION = 3;
@@ -18,33 +14,33 @@ var HEALTH_GAIN = 3;
 
 var SPEED = 1000;
 
+/**
+ * Idiot object constructor
+ *
+ * @param map
+ * @constructor
+ */
+
 function Idiot(map){
 
     var idiot = this;
+    var lifecycle;
 
-    /**
-     * Idiot properties
-     */
-    this.map = map;
+    idiot.map = map;
+    idiot.health = HEALTH;
+    idiot.speed = SPEED;
 
-    this.health = HEALTH;
-    this.speed = SPEED;
-
-
-
-    this._findPosition = function() {
+    idiot._findPosition = function() {
         var position = {};
-
-        var idiotMap = this.map;
+        var idiotMap = idiot.map;
         for (var y in idiotMap) {
             var row = idiotMap[y];
             for (var x in row) {
-                // ------------------------------------------------------------------------------- if statement !!!
-                switch (row[x]) {
-                    case IDIOT:
-                        position = {x : x, y: y};
-                        break;
-                    default : break;
+                if (row[x] == IDIOT) {
+                    position = {
+                        x: x,
+                        y: y
+                    };
                 }
             }
         }
@@ -52,172 +48,139 @@ function Idiot(map){
         return position;
     };
 
-   /* -------------------------------------------------------------------------------------------- array to obj
-    var position = {};
-    position = this._findPosition();
-    position.x;
-    position.y;
+    idiot.position = idiot._findPosition();
 
-    */
-
-
-    this.positionX = this._findPosition()[0];
-    this.positionY = this._findPosition()[1];
-
-
-
-    this.getElement = function(coordinates) {
-
-        var IdiotMap = this.map,
+    idiot.getElement = function(coordinates) {
+        var IdiotMap = idiot.map,
             positionX = coordinates[0],
             positionY = coordinates[1];
 
         return IdiotMap[positionY][positionX];
     };
 
-
-
-    this.lookInDirection = function(direction) {
+    idiot.lookInDirection = function(direction) {
         var element;
-        var x = parseInt(this.positionX),
-            y = parseInt(this.positionY);
+        var x = parseInt(idiot.position.x),
+            y = parseInt(idiot.position.y);
         switch (direction) {
             case UP_DIRECTION:
-                element = this.getElement([x, y-1]);
+                element = idiot.getElement([x, y - 1]);
                 break;
             case RIGHT_DIRECTION:
-                element = this.getElement([x+1, y]);
+                element = idiot.getElement([x + 1, y]);
                 break;
             case DOWN_DIRECTION:
-                element = this.getElement([x, y+1]);
+                element = idiot.getElement([x, y + 1]);
                 break;
             case LEFT_DIRECTION:
-                element = this.getElement([x-1, y]);
+                element = idiot.getElement([x - 1, y]);
                 break;
         }
 
         return element;
     };
 
-    this.run = function() {
-        setInterval(function(){
-            idiot.move()
-
-        }, SPEED)
-
+    idiot.run = function() {
+        lifecycle = setInterval(
+            function() {
+                idiot.move()
+            },
+            SPEED);
     };
-
 
     /**
      * Move Idiot method
      */
-    this.move = function() {
+    idiot.move = function() {
 
-        if (!this.health) {
-            this.die();
+        if (!idiot.health) {
+            idiot.die();
             return;
         }
 
         var direction = chooseDirection();
 
-        switch (this.lookInDirection(direction)) {
+        switch (idiot.lookInDirection(direction)) {
             case WALL:
-                console.log("in " + direction + " there is a WAll");
+                console.log("in " + direction + " there is a WAll"); //-------------------------------------------------
                 break;
             case PLANT:
-                console.log("in " + direction + " there is a PLANT");
-                this.stepInDirection(direction);
-                this.eat();
+                console.log("in " + direction + " there is a PLANT"); //------------------------------------------------
+                idiot.stepInDirection(direction);
+                idiot.eat();
                 break;
             case SPACE:
-                console.log("in " + direction + " there is a SPACE");
-                this.stepInDirection(direction);
+                console.log("in " + direction + " there is a SPACE"); //------------------------------------------------
+                idiot.stepInDirection(direction);
                 break;
         }
     };
 
 
+    idiot.stepInDirection = function(direction) {
+        var idiotMap = idiot.map,
+            prevX = parseInt(idiot.position.x),
+            prevY = parseInt(idiot.position.y),
+            currX,
+            currY;
 
-
-
-    this.stepInDirection = function(direction) {
-        var idiotMap = this.map,
-            x = parseInt(this.positionX),
-            y = parseInt(this.positionY);
-
-        idiotMap[y][x] = SPACE;
-
-        this.health -= HEALTH_LOSS;
-
-        console.log("MOVED! Health = " + this.health);
         switch (direction) {
             case UP_DIRECTION:
-                idiotMap[y-1][x] = IDIOT;
-                this.map = idiotMap;
-                this.positionX = x;
-                this.positionY = y-1;
-                console.log("posX after move " + this.positionX);
-                console.log("posY after move " + this.positionY);
+                currX = prevX;
+                currY = prevY - 1;
                 break;
             case RIGHT_DIRECTION:
-                idiotMap[y][x+1] = IDIOT;
-                this.map = idiotMap;
-                this.positionX = x+1;
-                this.positionY = y;
-                console.log("posX after move " + this.positionX);
-                console.log("posY after move " + this.positionY);
+                currX = prevX + 1;
+                currY = prevY;
+
                 break;
             case DOWN_DIRECTION:
-                idiotMap[y+1][x] = IDIOT;
-                this.map = idiotMap;
-                this.positionX = x;
-                this.positionY = y+1;
-                console.log("posX after move " + this.positionX);
-                console.log("posY after move " + this.positionY);
+                currX = prevX;
+                currY = prevY + 1;
                 break;
             case LEFT_DIRECTION:
-                idiotMap[y][x-1] = IDIOT;
-                this.map = idiotMap;
-                this.positionX = x-1;
-                this.positionY = y;
-                console.log("posX after move " + this.positionX);
-                console.log("posY after move " + this.positionY);
+                currX = prevX - 1;
+                currY = prevY;
                 break;
         }
-        updateMap(this.map, direction, [x,y]);
 
+        idiot.health -= HEALTH_LOSS;
+        idiotMap[prevY][prevX] = SPACE;
+        idiotMap[currY][currX] = IDIOT;
+        idiot.map = idiotMap;
+        idiot.position.x = currX;
+        idiot.position.y = currY;
+
+        console.log("MOVED! Health = " + idiot.health); //---------------------------------------------------------------
+        updateMap(idiot.map, direction, [prevX, prevY]);
     };
 
 
     /**
      * Eat Idiot method
      */
-    this.eat = function(direction) {
-
-        this.health = this.health + HEALTH_GAIN;
-        console.log("ATE! Health = " + this.health);
+    idiot.eat = function() {
+        idiot.health += HEALTH_GAIN;
+        console.log("ATE! Health = " + idiot.health); //---------------------------------------------------------------
     };
-
 
 
     /**
      * Die Idiot method
      */
-    this.die = function() {
-
-        var idiotMap = this.map,
-            x = parseInt(this.positionX),
-            y = parseInt(this.positionY);
-
+    idiot.die = function() {
+        var idiotMap = idiot.map,
+            x = parseInt(idiot.position.x),
+            y = parseInt(idiot.position.y);
         idiotMap[y][x] = DEAD;
-        console.log("IDIOT IS DEAD!");
-        updateMap(this.map, null, [x,y]);
+
+        console.log("IDIOT IS DEAD!"); //------------------------------------------------------------------------------
+        updateMap(idiot.map, null, [x, y]);
+
+        clearTimeout(lifecycle);
     };
 
-
-    //------------------------------------ 4 Directions CONST -------------------------------------
-
     function chooseDirection() {
-        return Math.floor((Math.random() * 4) + 1);
+        return Math.floor((Math.random() * DIRECTIONS_NUMBER) + 1);
     }
 }

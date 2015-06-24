@@ -33,18 +33,30 @@ var testMap1 = ["##########",
                 "#* ##*  *#",
                 "##########"];
 
+/**
+ * Map Constants
+ */
+
 var IDIOT = 0;
 var WALL = 1;
 var SPACE = 2;
 var PLANT = 3;
 var DEAD = 4;
 
-
-var SCALE = 10;
+var SCALE = 10; //-------------------------------------------------------------------------------------------------------
 var CELL_SIZE = 35;
+
+var STYLES = [
+    "idiot",
+    "wall",
+    "space",
+    "plant",
+    "dead"
+];
 
 
 function renderMap(map) {
+
     var idiotMap = [];
     for (var key in map) {
         var mapArr = map[key].split("");
@@ -68,41 +80,17 @@ function renderMap(map) {
 
 
 function viewMap(map) {
+
     var world = document.getElementById("world");
-    var wall,
-        idiot,
-        space,
-        plant;
+    var element;
     for (var row in map) {
         for (var cell in map[row]) {
             var top = row * CELL_SIZE;
             var left = cell * CELL_SIZE;
-            switch (map[row][cell]) {
-                case WALL:
-                    wall  = document.createElement("div");
-                    wall.setAttribute("class", "wall");
-                    wall.setAttribute("style", "top: " + top + "px; left: " + left + "px");
-                    world.appendChild(wall);
-                    break;
-                case IDIOT:
-                    idiot = document.createElement("div");
-                    idiot.setAttribute("class", "idiot");
-                    idiot.setAttribute("style", "top: " + top + "px; left: " + left + "px");
-                    world.appendChild(idiot);
-                    break;
-                case PLANT:
-                    plant = document.createElement("div");
-                    plant.setAttribute("class", "plant");
-                    plant.setAttribute("style", "top: " + top + "px; left: " + left + "px");
-                    world.appendChild(plant);
-                    break;
-                case SPACE:
-                    space = document.createElement("div");
-                    space.setAttribute("class", "space");
-                    space.setAttribute("style", "top: " + top + "px; left: " + left + "px");
-                    world.appendChild(space);
-                    break;
-            }
+            element = document.createElement("div");
+            element.setAttribute("class", STYLES[map[row][cell]]);
+            element.setAttribute("style", "top: " + top + "px; left: " + left + "px");
+            world.appendChild(element);
         }
     }
 }
@@ -112,34 +100,32 @@ function updateMap(map, direction, prevIdiotPosition) {
     var length = map.length;
     var worldElements = document.getElementById("world");
     var cells = worldElements.getElementsByTagName("div");
-
     var prevX = prevIdiotPosition[0];
     var prevY = prevIdiotPosition[1];
     var prevPos = length * prevY + prevX;
+    var currPosition = 0;
 
     if (direction == null) {
-        cells[prevPos].setAttribute("class", "dead");
+        cells[prevPos].setAttribute("class", STYLES[DEAD]);
+
         return;
     }
 
-    cells[prevPos].setAttribute("class", "space");
-    var value = 0;
+    cells[prevPos].setAttribute("class", STYLES[SPACE]);
     switch (direction) {
         case UP_DIRECTION:
-            //--------------------------------------------------------------------------------------
-            value = prevPos-length;
-            cells[prevPos-length].setAttribute("class", "idiot");
+            currPosition = prevPos - length;
             break;
         case RIGHT_DIRECTION:
-            cells[prevPos + 1].setAttribute("class", "idiot");
+            currPosition = prevPos + 1;
             break;
         case DOWN_DIRECTION:
-            cells[prevPos + length].setAttribute("class", "idiot");
+            currPosition = prevPos + length;
             break;
         case LEFT_DIRECTION:
-            cells[prevPos - 1].setAttribute("class", "idiot");
+            currPosition = prevPos - 1;
             break;
     }
 
-    cells[value].setAttribute("class", "idiot");
+    cells[currPosition].setAttribute("class", STYLES[IDIOT]);
 }
