@@ -40,6 +40,10 @@ var PLANT = 3;
 var DEAD = 4;
 
 
+var SCALE = 10;
+var CELL_SIZE = 20;
+
+
 function render(map) {
     var idiotMap = [];
     for (var key in map) {
@@ -66,36 +70,45 @@ function render(map) {
 function view(map) {
     var world = document.getElementById("world");
 
-    var wall  = document.createElement("div");
-    var idiot = document.createElement("div");
-    var space = document.createElement("div");
-    var plant = document.createElement("div");
-    wall.setAttribute("class", "wall");
-    idiot.setAttribute("class", "idiot");
-    space.setAttribute("class", "space");
-    plant.setAttribute("class", "plant");
-
-    world.appendChild(wall );
-    world.appendChild(idiot);
-    world.appendChild(space);
-
-
-
+    var wall  ;
+    var idiot ;
+    var space ;
+    var plant ;
     for (var row in map) {
         for (var cell in map[row]) {
+            var top = row * CELL_SIZE;
+            var left = cell * CELL_SIZE;
             switch (map[row][cell]) {
                 case WALL:
-                    wall.setAttribute("style", "top: " + row + "px; botom: " + cell + "px");
+                    wall  = document.createElement("div");
+                    wall.setAttribute("class", "wall");
+
+                    wall.setAttribute("style", "top: " + top + "px; left: " + left + "px");
                     world.appendChild(wall);
                     break;
                 case IDIOT:
+                    idiot = document.createElement("div");
+                    idiot.setAttribute("class", "idiot");
+
+                    idiot.setAttribute("style", "top: " + top + "px; left: " + left + "px");
+
                     world.appendChild(idiot);
                     break;
                 case PLANT:
-                    world.appendChild(space);
+                    plant = document.createElement("div");
+                    plant.setAttribute("class", "plant");
+
+                    plant.setAttribute("style", "top: " + top + "px; left: " + left + "px");
+
+                    world.appendChild(plant);
                     break;
                 case SPACE:
-                    world.appendChild(plant);
+                    space = document.createElement("div");
+                    space.setAttribute("class", "space");
+
+                    space.setAttribute("style", "top: " + top + "px; left: " + left + "px");
+
+                    world.appendChild(space);
                     break;
             }
         }

@@ -7,7 +7,6 @@
  * @param y
  */
 
-
 var UP_DIRECTION = 1;
 var RIGHT_DIRECTION = 2;
 var DOWN_DIRECTION = 3;
@@ -19,7 +18,6 @@ var HEALTH_GAIN = 3;
 
 var SPEED = 100;
 
-
 function Idiot(map){
 
     /**
@@ -29,7 +27,6 @@ function Idiot(map){
 
     this.health = HEALTH;
     this.spaad = SPEED;
-
 
     this._findPosition = function() {
         var position = [];
@@ -58,7 +55,6 @@ function Idiot(map){
 
         return IdiotMap[positionY][positionX];
     };
-
 
     this.lookInDirection = function(direction) {
         var element;
@@ -111,7 +107,6 @@ function Idiot(map){
                 break;
         }
     };
-
 
     this.moveInDirection = function(direction) {
         var idiotMap = this.map,
