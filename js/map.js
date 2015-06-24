@@ -97,7 +97,7 @@ function viewMap(map) {
 
 function updateMap(map, direction, prevIdiotPosition) {
 
-    var length = map.length;
+    var length = map[0].length;
     var worldElements = document.getElementById("world");
     var cells = worldElements.getElementsByTagName("div");
     var prevX = prevIdiotPosition[0];
