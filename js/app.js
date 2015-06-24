@@ -5,4 +5,5 @@ var idiot = new Idiot(idiotMap);
 viewMap(idiotMap);
 
 //setInterval(function(){ idiot.move(); }, 3000);
-idiot.move();
+
+idiot.run();

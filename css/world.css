@@ -1,7 +1,8 @@
 .wall,
 .space,
 .plant,
-.idiot {
+.idiot,
+.dead {
     width: 30px;
     height: 30px;
     position: absolute;
@@ -20,5 +21,9 @@
 }
 
 .plant {
-    background-color: green;
+    background-color: #008000;
+}
+
+.dead {
+    background-color: #000000;
 }

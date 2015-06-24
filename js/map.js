@@ -115,23 +115,31 @@ function updateMap(map, direction, prevIdiotPosition) {
 
     var prevX = prevIdiotPosition[0];
     var prevY = prevIdiotPosition[1];
-
     var prevPos = length * prevY + prevX;
-    cells[prevPos].setAttribute("class", "space");
 
+    if (direction == null) {
+        cells[prevPos].setAttribute("class", "dead");
+        return;
+    }
+
+    cells[prevPos].setAttribute("class", "space");
+    var value = 0;
     switch (direction) {
         case UP_DIRECTION:
+            //--------------------------------------------------------------------------------------
+            value = prevPos-length;
             cells[prevPos-length].setAttribute("class", "idiot");
             break;
         case RIGHT_DIRECTION:
-            cells[prevPos+1].setAttribute("class", "idiot");
+            cells[prevPos + 1].setAttribute("class", "idiot");
             break;
         case DOWN_DIRECTION:
-            cells[prevPos+length].setAttribute("class", "idiot");
+            cells[prevPos + length].setAttribute("class", "idiot");
             break;
         case LEFT_DIRECTION:
-            cells[prevPos-1].setAttribute("class", "idiot");
+            cells[prevPos - 1].setAttribute("class", "idiot");
             break;
     }
-}
 
+    cells[value].setAttribute("class", "idiot");
+}
