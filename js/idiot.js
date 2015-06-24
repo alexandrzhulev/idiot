@@ -29,26 +29,7 @@ function Idiot(map){
     idiot.map = map;
     idiot.health = HEALTH;
     idiot.speed = SPEED;
-
-    idiot._findPosition = function() {
-        var position = {};
-        var idiotMap = idiot.map;
-        for (var y in idiotMap) {
-            var row = idiotMap[y];
-            for (var x in row) {
-                if (row[x] == IDIOT) {
-                    position = {
-                        x: x,
-                        y: y
-                    };
-                }
-            }
-        }
-
-        return position;
-    };
-
-    idiot.position = idiot._findPosition();
+    idiot.position = findPosition();
 
     idiot.getElement = function(coordinates) {
         var IdiotMap = idiot.map,
@@ -92,14 +73,11 @@ function Idiot(map){
      * Move Idiot method
      */
     idiot.move = function() {
-
         if (!idiot.health) {
             idiot.die();
             return;
         }
-
         var direction = chooseDirection();
-
         switch (idiot.lookInDirection(direction)) {
             case WALL:
                 console.log("in " + direction + " there is a WAll"); //-------------------------------------------------
@@ -123,7 +101,6 @@ function Idiot(map){
             prevY = parseInt(idiot.position.y),
             currX,
             currY;
-
         switch (direction) {
             case UP_DIRECTION:
                 currX = prevX;
@@ -143,18 +120,15 @@ function Idiot(map){
                 currY = prevY;
                 break;
         }
-
         idiot.health -= HEALTH_LOSS;
         idiotMap[prevY][prevX] = SPACE;
         idiotMap[currY][currX] = IDIOT;
         idiot.map = idiotMap;
         idiot.position.x = currX;
         idiot.position.y = currY;
-
         console.log("MOVED! Health = " + idiot.health); //---------------------------------------------------------------
         updateMap(idiot.map, direction, [prevX, prevY]);
     };
-
 
     /**
      * Eat Idiot method
@@ -164,7 +138,6 @@ function Idiot(map){
         console.log("ATE! Health = " + idiot.health); //---------------------------------------------------------------
     };
 
-
     /**
      * Die Idiot method
      */
@@ -173,14 +146,31 @@ function Idiot(map){
             x = parseInt(idiot.position.x),
             y = parseInt(idiot.position.y);
         idiotMap[y][x] = DEAD;
-
         console.log("IDIOT IS DEAD!"); //------------------------------------------------------------------------------
         updateMap(idiot.map, null, [x, y]);
-
         clearTimeout(lifecycle);
     };
 
+    function findPosition() {
+        var position = {};
+        var idiotMap = idiot.map;
+        for (var y in idiotMap) {
+            var row = idiotMap[y];
+            for (var x in row) {
+                if (row[x] == IDIOT) {
+                    position = {
+                        x: x,
+                        y: y
+                    };
+                }
+            }
+        }
+
+        return position;
+    }
+
     function chooseDirection() {
+
         return Math.floor((Math.random() * DIRECTIONS_NUMBER) + 1);
     }
 }
