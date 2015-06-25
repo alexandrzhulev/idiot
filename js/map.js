@@ -43,7 +43,6 @@ var SPACE = 2;
 var PLANT = 3;
 var DEAD = 4;
 
-var SCALE = 10; //-------------------------------------------------------------------------------------------------------
 var CELL_SIZE = 35;
 
 var STYLES = [
@@ -70,6 +69,7 @@ function renderMap(map) {
                     break;
                 case "O": mapArr[i] = IDIOT;
                     break;
+                default : break;
             }
         }
         idiotMap.push(mapArr);
@@ -107,7 +107,6 @@ function updateMap(map, direction, prevIdiotPosition) {
 
     if (direction == null) {
         cells[prevPos].setAttribute("class", STYLES[DEAD]);
-
         return;
     }
 
@@ -125,6 +124,7 @@ function updateMap(map, direction, prevIdiotPosition) {
         case LEFT_DIRECTION:
             currPosition = prevPos - 1;
             break;
+        default : break;
     }
 
     cells[currPosition].setAttribute("class", STYLES[IDIOT]);
