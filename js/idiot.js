@@ -15,6 +15,7 @@ var HEALTH_GAIN = 3;
 var SPEED = 1000;
 
 var RADIUS = 7;
+var STEP_WIDTH = 1;
 
 /**
  * Idiot object constructor
@@ -78,30 +79,27 @@ function Idiot(map){
     };
 
     idiot.move = function() {
+        var direction = 0;
         if (!idiot.health) {
             idiot.die();
             return;
         }
         idiot.findPlant();
         if (idiot.route.direction == false) {
-            var direction = chooseDirection();
-            switch (idiot.lookInDirection(direction, 1)) {
-                case WALL:
-                    break;
-                case PLANT:
-                    idiot.stepInDirection(direction);
-                    idiot.eat();
-                    break;
-                case SPACE:
-                    idiot.stepInDirection(direction);
-                    break;
-                default : break;
-            }
+            direction = chooseDirection();
         } else {
-            for (var i = 1; i <= idiot.route.radius; i++) {
-                setTimeout(idiot.stepInDirection(idiot.route.direction), SPEED);
-            }
-            idiot.eat();
+            direction = idiot.route.direction;
+        }
+        switch (idiot.lookInDirection(direction, STEP_WIDTH)) {
+            case WALL: break;
+            case PLANT:
+                idiot.stepInDirection(direction);
+                idiot.eat();
+                break;
+            case SPACE:
+                idiot.stepInDirection(direction);
+                break;
+            default : break;
         }
     };
 
