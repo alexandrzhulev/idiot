@@ -12,7 +12,7 @@ var HEALTH = 10;
 var HEALTH_LOSS = 1;
 var HEALTH_GAIN = 3;
 
-var SPEED = 1000;
+var SPEED = 500;
 
 var RADIUS = 7;
 var STEP_WIDTH = 1;
@@ -37,6 +37,7 @@ function Idiot(map){
     idiot.radius = RADIUS;
     idiot.position = findPosition();
     idiot.wallInDirection = {};
+    idiot.wallInDirection2 = {};
     idiot.route = {};
 
     idiot.getElement = function(coordinates) {
@@ -86,7 +87,10 @@ function Idiot(map){
         }
         idiot.findPlant();
         if (idiot.route.direction == false) {
-            direction = chooseDirection();
+
+
+
+            direction = chooseRandomDirection();
         } else {
             direction = idiot.route.direction;
         }
@@ -140,7 +144,8 @@ function Idiot(map){
     };
 
     idiot.eat = function() {
-        idiot.health += HEALTH_GAIN;
+        //idiot.health += HEALTH_GAIN;
+        idiot.health = 20;
         //console.log("ATE! Health = " + idiot.health); //---------------------------------------------------------------
     };
 
@@ -171,10 +176,22 @@ function Idiot(map){
                             idiot.wallInDirection[direction] = true;
                             break;
                         case PLANT:
+
+                            idiot.wallInDirection = {
+                                1: false,
+                                2: false,
+                                3: false,
+                                4: false
+                            };
+
                             return idiot.route = {
                                 direction: direction,
                                 radius: radius
                             };
+
+
+
+
                             break;
                         case SPACE:
                             break;
@@ -183,6 +200,22 @@ function Idiot(map){
                 }
             }
         }
+
+        idiot.wallInDirection2 = {
+            1: false,
+            2: false,
+            3: false,
+            4: false
+        };
+        //for (var radius = 1; radius <= 1; radius++) {
+        for (var wallDirection = 1; wallDirection <= DIRECTIONS_NUMBER; wallDirection++) {
+            if (idiot.wallInDirection2[wallDirection]) {
+                continue;
+            } else {
+                idiot.wallInDirection2[wallDirection] = (idiot.lookInDirection(wallDirection, STEP_WIDTH) == WALL);
+            }
+        }
+        //}
 
         return idiot.route = {
             direction: false
@@ -207,8 +240,17 @@ function Idiot(map){
         return position;
     }
 
-    function chooseDirection() {
-
-        return Math.floor((Math.random() * DIRECTIONS_NUMBER) + 1);
+    function chooseRandomDirection() {
+        var d1 = Math.floor((Math.random() * DIRECTIONS_NUMBER) + 1);
+        if (idiot.wallInDirection2[d1]) {
+            d1 = chooseRandomDirection();
+        }
+        idiot.wallInDirection2 = {
+            1: false,
+            2: false,
+            3: false,
+            4: false
+        };
+        return d1;
     }
 }
