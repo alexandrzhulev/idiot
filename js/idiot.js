@@ -37,7 +37,7 @@ function Idiot(map){
     idiot.radius = RADIUS;
     idiot.position = findPosition();
     idiot.wallInDirection = {};
-    idiot.wallInDirection2 = {};
+    idiot.wallInOneStepDirection = {};
     idiot.route = {};
 
     idiot.getElement = function(coordinates) {
@@ -189,17 +189,17 @@ function Idiot(map){
             }
         }
 
-        idiot.wallInDirection2 = {
+        idiot.wallInOneStepDirection = {
             1: false,
             2: false,
             3: false,
             4: false
         };
         for (var wallDirection = 1; wallDirection <= DIRECTIONS_NUMBER; wallDirection++) {
-            if (idiot.wallInDirection2[wallDirection]) {
+            if (idiot.wallInOneStepDirection[wallDirection]) {
                 continue;
             } else {
-                idiot.wallInDirection2[wallDirection] = (idiot.lookInDirection(wallDirection, STEP_WIDTH) == WALL);
+                idiot.wallInOneStepDirection[wallDirection] = (idiot.lookInDirection(wallDirection, STEP_WIDTH) == WALL);
             }
         }
 
@@ -228,12 +228,12 @@ function Idiot(map){
 
     function chooseRandomDirection() {
         var directions = [];
-        for (var direction in idiot.wallInDirection2) {
-            if (idiot.wallInDirection2[direction] == false) {
+        for (var direction in idiot.wallInOneStepDirection) {
+            if (idiot.wallInOneStepDirection[direction] == false) {
                 directions.push(direction);
             }
         }
-        idiot.wallInDirection2 = {
+        idiot.wallInOneStepDirection = {
             1: false,
             2: false,
             3: false,
