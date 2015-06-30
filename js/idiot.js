@@ -241,9 +241,11 @@ function Idiot(map){
     }
 
     function chooseRandomDirection() {
-        var d1 = Math.floor((Math.random() * DIRECTIONS_NUMBER) + 1);
-        if (idiot.wallInDirection2[d1]) {
-            d1 = chooseRandomDirection();
+        var directions = [];
+        for (var direction in idiot.wallInDirection2) {
+            if (idiot.wallInDirection2[direction] == false) {
+                directions.push(direction);
+            }
         }
         idiot.wallInDirection2 = {
             1: false,
@@ -251,6 +253,7 @@ function Idiot(map){
             3: false,
             4: false
         };
-        return d1;
+        var path = directions[Math.floor(Math.random()*directions.length)]
+        return parseInt(path);
     }
 }
